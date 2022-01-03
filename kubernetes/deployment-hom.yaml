@@ -1,0 +1,74 @@
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "shippets-web-management-deployment-config-fm51"
+  namespace: "default"
+  labels:
+    app: "shippets-web-management"
+    tier: "spa-client"
+data:
+  NODE_ENV: "production"
+  VUE_APP_API: "http://35.199.113.137:7111"
+  VUE_APP_UPLOAD_DOCUMENTS_API: "http://34.95.143.101:7112"
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "shippets-web-management-deployment"
+  namespace: "default"
+  labels:
+    app: "shippets-web-management"
+    tier: "spa-client"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: "shippets-web-management"
+      tier: "spa-client"
+  template:
+    metadata:
+      labels:
+        app: "shippets-web-management"
+        tier: "spa-client"
+    spec:
+      containers:
+      - name: "shippets-web-management-sha256-1"
+        image: "gcr.io/phrasal-catwalk-303914/shippets/shippets-web-management@sha256:710dc054145c1a9e7abb845345a84a49de561d54b428d2b9c030167323176ba5"
+        env:
+        - name: "NODE_ENV"
+          valueFrom:
+            configMapKeyRef:
+              key: "NODE_ENV"
+              name: "shippets-web-management-deployment-config-fm51"
+        - name: "VUE_APP_API"
+          valueFrom:
+            configMapKeyRef:
+              key: "VUE_APP_API"
+              name: "shippets-web-management-deployment-config-fm51"
+        - name: "VUE_APP_UPLOAD_DOCUMENTS_API"
+          valueFrom:
+            configMapKeyRef:
+              key: "VUE_APP_UPLOAD_DOCUMENTS_API"
+              name: "shippets-web-management-deployment-config-fm51"
+---
+apiVersion: "autoscaling/v2beta1"
+kind: "HorizontalPodAutoscaler"
+metadata:
+  name: "shippets-web-management-deployment-hpa-elon"
+  namespace: "default"
+  labels:
+    app: "shippets-web-management"
+    tier: "spa-client"
+spec:
+  scaleTargetRef:
+    kind: "Deployment"
+    name: "shippets-web-management-deployment"
+    apiVersion: "apps/v1"
+  minReplicas: 1
+  maxReplicas: 1
+  metrics:
+  - type: "Resource"
+    resource:
+      name: "cpu"
+      targetAverageUtilization: 80

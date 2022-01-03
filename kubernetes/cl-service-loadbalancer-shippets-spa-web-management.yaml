@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    cloud.google.com/neg: '{"ingress":true}'
+  creationTimestamp: "2021-04-17T05:09:31Z"
+  finalizers:
+  - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app: shippets-web-management
+    tier: spa-client
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:labels:
+          .: {}
+          f:app: {}
+          f:tier: {}
+      f:spec:
+        f:externalTrafficPolicy: {}
+        f:ports:
+          .: {}
+          k:{"port":8001,"protocol":"TCP"}:
+            .: {}
+            f:port: {}
+            f:protocol: {}
+            f:targetPort: {}
+        f:selector:
+          .: {}
+          f:app: {}
+          f:tier: {}
+        f:sessionAffinity: {}
+        f:type: {}
+    manager: GoogleCloudConsole
+    operation: Update
+    time: "2021-04-17T05:09:31Z"
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:finalizers:
+          .: {}
+          v:"service.kubernetes.io/load-balancer-cleanup": {}
+      f:status:
+        f:loadBalancer:
+          f:ingress: {}
+    manager: kube-controller-manager
+    operation: Update
+    time: "2021-04-17T05:10:11Z"
+  name: shippets-web-management-deployment-service
+  namespace: default
+  resourceVersion: "2472115"
+  selfLink: /api/v1/namespaces/default/services/shippets-web-management-deployment-service
+  uid: c6b30508-5978-443e-9cc6-0d6f76ff067c
+spec:
+  clusterIP: 10.24.4.19
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: 30586
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  selector:
+    app: shippets-web-management
+    tier: spa-client
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+    - ip: 34.95.172.59
